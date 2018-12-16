@@ -1,0 +1,50 @@
+﻿<Window x:Class="KodowanieLSB.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KodowanieLSB"
+        mc:Ignorable="d"
+        Title="Koder Najmniej Znaczącego Bitu" Height="408" Width="1200.0" ResizeMode="CanMinimize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TabControl x:Name="tabControl" HorizontalAlignment="Left" Width="1194" Margin="0,0,-0.4,0" Height="378" VerticalAlignment="Top" IsSynchronizedWithCurrentItem="True">
+            <TabItem Header="Koder">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="PlikBlok" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Ścieżka pliku do zakodowania tekstu:" VerticalAlignment="Top"/>
+                    <TextBox x:Name="PlikBox" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="1168" IsEnabled="False" TextChanged="PlikBox_TextChanged"/>
+                    <Button x:Name="WybierzPlikDoKodownia" Content="Wybierz Plik" HorizontalAlignment="Left" Margin="1055,10,0,0" VerticalAlignment="Top" Width="123" Click="WybierzPlikDoKodownia_Click"/>
+                    <TextBlock x:Name="Plik2Blok" HorizontalAlignment="Left" Margin="10,59,0,0" TextWrapping="Wrap" Text="Ścieżka pliku do zapisu zakodowanego tekstu:" VerticalAlignment="Top"/>
+                    <TextBox x:Name="Plik2Box" HorizontalAlignment="Left" Height="23" Margin="10,80,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="1168" TextChanged="Plik2Box_TextChanged"/>
+                    <Button x:Name="WybierzPlikDoZapisania" Content="Wybierz Plik" HorizontalAlignment="Left" Margin="1055,59,0,0" VerticalAlignment="Top" Width="123" Click="WybierzPlikDoZapisania_Click"/>
+                    <TextBlock x:Name="TextBlok" HorizontalAlignment="Left" Margin="10,108,0,0" TextWrapping="Wrap" Text="Tekst do zakodowania:" VerticalAlignment="Top"/>
+                    <TextBox x:Name="TextBox" HorizontalAlignment="Left" Height="212" Margin="10,129,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="1168"/>
+                    <Button x:Name="WczytajTxT" Content="Wczytaj tekst z pliku" HorizontalAlignment="Left" Margin="1055,108,0,0" VerticalAlignment="Top" Width="123" Click="WczytajTxT_Click"/>
+                    <Button x:Name="Koduj" Content="Koduj" HorizontalAlignment="Left" Margin="975,108,0,0" VerticalAlignment="Top" Width="75" Click="Koduj_Click" IsEnabled="False"/>
+                    <Button x:Name="HelpKod" Content="Pomoc" HorizontalAlignment="Left" Margin="975,10,0,0" VerticalAlignment="Top" Width="75" Click="HelpKod_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Dekoder">
+                <Grid Background="#FFE5E5E5" Margin="1,0,-1,-2.4" Height="359" VerticalAlignment="Bottom">
+                    <TextBlock x:Name="PlikBlok_Copy" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Ścieżka pliku do odczytania tekstu:" VerticalAlignment="Top"/>
+                    <TextBox x:Name="PlikBox_Copy" HorizontalAlignment="Left" Height="23" Margin="10,31,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="1168" IsEnabled="False" TextChanged="PlikBox_Copy_TextChanged"/>
+                    <Button x:Name="WybierzPlikDoKodownia_Copy" Content="Wybierz Plik" HorizontalAlignment="Left" Margin="1055,10,0,0" VerticalAlignment="Top" Width="123" Click="WybierzPlikDoKodownia_Copy_Click"/>
+                    <TextBlock x:Name="Plik2Blok_Copy" HorizontalAlignment="Left" Margin="10,59,0,0" TextWrapping="Wrap" Text="Ścieżka pliku do zapisu odkodowanego tekstu:" VerticalAlignment="Top"/>
+                    <TextBox x:Name="Plik2Box_Copy" HorizontalAlignment="Left" Height="23" Margin="10,80,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="1168" TextChanged="Plik2Box_Copy_TextChanged"/>
+                    <Button x:Name="WybierzPlikDoZapisania_Copy" Content="Wybierz Plik" HorizontalAlignment="Left" Margin="1055,59,0,0" VerticalAlignment="Top" Width="123" Click="WybierzPlikDoZapisania_Copy_Click"/>
+                    <TextBlock x:Name="TextBlok_Copy" HorizontalAlignment="Left" Margin="10,108,0,0" TextWrapping="Wrap" Text="Odkodowany tekst:" VerticalAlignment="Top"/>
+                    <TextBox x:Name="TextBox_Copy" HorizontalAlignment="Left" Height="212" Margin="10,0,0,18" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="1168"/>
+                    <Button x:Name="ZapiszTxT" Content="Zapisz tekst do pliku" HorizontalAlignment="Left" Margin="1055,108,0,0" VerticalAlignment="Top" Width="123" Click="ZapiszTxT_Click" IsEnabled="False"/>
+                    <Button x:Name="Dekoduj" Content="Dekoduj" HorizontalAlignment="Left" Margin="975,108,0,0" VerticalAlignment="Top" Width="75" Click="Dekoduj_Click" IsEnabled="False"/>
+                    <Button x:Name="HelpDek" Content="Pomoc" HorizontalAlignment="Left" Margin="975,10,0,0" VerticalAlignment="Top" Width="75"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>
