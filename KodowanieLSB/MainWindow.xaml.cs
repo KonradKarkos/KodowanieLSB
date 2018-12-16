@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Drawing;
 using System.Collections;
 using Color = System.Drawing.Color;
+using System.Text.RegularExpressions;
 
 namespace KodowanieLSB
 {
@@ -65,13 +66,48 @@ namespace KodowanieLSB
             if (openFileDialog.ShowDialog() == true)
             {
                 Plik = openFileDialog.FileName;
-                StreamReader sr = new StreamReader(Plik);
+                StreamReader sr = new StreamReader(Plik, System.Text.Encoding.GetEncoding(1250));
                 StringBuilder sb = new StringBuilder();
                 String linia;
-                while ((linia = sr.ReadLine()) != null) { sb.Append(linia); }
+                while ((linia = sr.ReadLine()) != null)
+                { 
+                    sb.Append(linia);
+                }
                 TextBox.Text = sb.ToString();
                 sr.Dispose();
             }
+        }
+
+        private String podmien(String strMessage)
+        {
+            strMessage = Regex.Replace(strMessage, "[éèëêðę]", "e");
+            strMessage = Regex.Replace(strMessage, "[ÉÈËÊĘ]", "E");
+            strMessage = Regex.Replace(strMessage, "[ÀÁÂÃÄÅĄ]", "A");
+            strMessage = Regex.Replace(strMessage, "[àáâãäåą]", "a");
+            strMessage = Regex.Replace(strMessage, "[ÙÚÛÜ]", "U");
+            strMessage = Regex.Replace(strMessage, "[ùúûüµ]", "u");
+            strMessage = Regex.Replace(strMessage, "[òóôõöø]", "o");
+            strMessage = Regex.Replace(strMessage, "[ÒÓÔÕÖØ]", "O");
+            strMessage = Regex.Replace(strMessage, "[ìíîï]", "i");
+            strMessage = Regex.Replace(strMessage, "[ÌÍÎÏ]", "I");
+            strMessage = Regex.Replace(strMessage, "[ł]", "l");
+            strMessage = Regex.Replace(strMessage, "[Ł]", "L");
+            strMessage = Regex.Replace(strMessage, "[šś]", "s");
+            strMessage = Regex.Replace(strMessage, "[ŠŚ]", "S");
+            strMessage = Regex.Replace(strMessage, "[ñń]", "n");
+            strMessage = Regex.Replace(strMessage, "[ÑŃ]", "N");
+            strMessage = Regex.Replace(strMessage, "[çć]", "c");
+            strMessage = Regex.Replace(strMessage, "[ÇĆ]", "C");
+            strMessage = Regex.Replace(strMessage, "[ÿ]", "y");
+            strMessage = Regex.Replace(strMessage, "[Ÿ]", "Y");
+            strMessage = Regex.Replace(strMessage, "[žżź]", "z");
+            strMessage = Regex.Replace(strMessage, "[ŽŻŹ]", "Z");
+            strMessage = Regex.Replace(strMessage, "[Ð]", "D");
+            strMessage = Regex.Replace(strMessage, "[œ]", "oe");
+            strMessage = Regex.Replace(strMessage, "[Œ]", "Oe");
+            strMessage = Regex.Replace(strMessage, "[«»\u201C\u201D\u201E\u201F\u2033\u2036]", "\"");
+            strMessage = Regex.Replace(strMessage, "[\u2026]", "...");
+            return strMessage;
         }
 
         private void Koduj_Click(object sender, RoutedEventArgs e)
@@ -90,6 +126,7 @@ namespace KodowanieLSB
                 else
                 {
                     Byte[] znaki = new Byte[dlugosc];
+                    TextBox.Text = podmien(TextBox.Text);
                     String DoZakodowania = TextBox.Text;
                     //przerobienie liter na formę w bajtach
                     for (int i = 0; i < dlugosc; i++)
@@ -99,7 +136,6 @@ namespace KodowanieLSB
                     //przerobienie bajtów na tablicę bitów
                     BitArray Bity = new BitArray(znaki);
                     dlugosc = dlugosc * 8;
-                    int ilosc = obraz.Height * obraz.Width * 6;
                     int pozycja = 0;
                     int szerokosc = obraz.Width;
                     int wysokosc = obraz.Height;
@@ -112,7 +148,10 @@ namespace KodowanieLSB
                     Byte[] kolor = new Byte[1];
                     //ta też
                     int[] konwersja = new int[3];
-                    for(int i=0;i<szerokosc;i++)
+                    //pobranie ilości bitów z każdej składowej koloru jaka ma być wykorzystana
+                    ComboBoxItem typeItem = (ComboBoxItem)comboBoxKod.SelectedItem;
+                    int iloscbitow = (typeItem.Content.ToString()[0]) - '0' - 1;
+                    for (int i=0;i<szerokosc;i++)
                     {
                         for(int j=0;j<wysokosc;j++)
                         {
@@ -129,33 +168,18 @@ namespace KodowanieLSB
                                 kolory[1] = new BitArray(kolor);
                                 kolor[0] = clr.B;
                                 kolory[2] = new BitArray(kolor);
-                                kolory[0][6] = Bity[pozycja];
-                                pozycja++;
-                                //warunki na wypadek gdyby nastąpił koniec ciągu żeby nie wyjść poza zakres
-                                if (pozycja < dlugosc)
+                                for(int z=0;z<3;z++)
                                 {
-                                    kolory[0][7] = Bity[pozycja];
-                                    pozycja++;
-                                }
-                                if (pozycja < dlugosc)
-                                {
-                                    kolory[1][6] = Bity[pozycja];
-                                    pozycja++;
-                                }
-                                if (pozycja < dlugosc)
-                                {
-                                    kolory[1][7] = Bity[pozycja];
-                                    pozycja++;
-                                }
-                                if (pozycja < dlugosc)
-                                {
-                                    kolory[2][6] = Bity[pozycja];
-                                    pozycja++;
-                                }
-                                if (pozycja < dlugosc)
-                                {
-                                    kolory[2][7] = Bity[pozycja];
-                                    pozycja++;
+                                    for(int u=7-iloscbitow;u<8;u++)
+                                    {
+                                        //warunek na wypadek gdyby nastąpił koniec ciągu żeby nie wyjść poza zakres
+                                        if (pozycja < dlugosc)
+                                        {
+                                            kolory[z][u] = Bity[pozycja];
+                                            pozycja++;
+                                        }
+                                        else break;
+                                    }
                                 }
                                 for(int z =0;z<3;z++)
                                 {
@@ -164,7 +188,7 @@ namespace KodowanieLSB
                                 //przypisanie zakodowanego pixela do nowego
                                 c = Color.FromArgb(konwersja[0], konwersja[1], konwersja[2]);
                             }
-                            //ustawienie nowego pixela do w noweym obrazie
+                            //ustawienie nowego pixela do w nowym obrazie
                             Zakodowane.SetPixel(i, j, c);
                         }
                     }
@@ -186,15 +210,18 @@ namespace KodowanieLSB
             //sprawdzenien czy plik do zdekodowania istnieje
             if(File.Exists(PlikBox_Copy.Text))
             {
+                //pobranie ilości bitów z każdej składowej koloru jaka ma być wykorzystana
+                ComboBoxItem typeItem = (ComboBoxItem)comboBoxDekod.SelectedItem;
+                int iloscbitow = typeItem.Content.ToString()[0] - '0' - 1;
                 Bitmap obraz = new Bitmap(PlikBox_Copy.Text);
                 int szerokosc = obraz.Width;
                 int wysokosc = obraz.Height;
                 Color clr;
                 BitArray[] kolory = new BitArray[3];
-                BitArray znaki = new BitArray(szerokosc * wysokosc * 6);
+                BitArray znaki = new BitArray(szerokosc * wysokosc * (iloscbitow+1) * 3);
                 int pozycja = 0;
                 Byte[] kolor = new Byte[1];
-                //odczytywanie dwóch najmniej zaczących bitów z składowych kolorów każdego piksela
+                //odczytywanie danej ilości bitów z składowych kolorów każdego piksela
                 for (int i=0;i<szerokosc;i++)
                 {
                     for(int j=0;j<wysokosc;j++)
@@ -206,13 +233,14 @@ namespace KodowanieLSB
                         kolory[1] = new BitArray(kolor);
                         kolor[0] = clr.B;
                         kolory[2] = new BitArray(kolor);
-                        znaki[pozycja] = kolory[0][6];
-                        znaki[pozycja+1] = kolory[0][7];
-                        znaki[pozycja+2] = kolory[1][6];
-                        znaki[pozycja+3] = kolory[1][7];
-                        znaki[pozycja+4] = kolory[2][6];
-                        znaki[pozycja+5] = kolory[2][7];
-                        pozycja += 6;
+                        for (int z = 0; z < 3; z++)
+                        {
+                            for (int u = 7-iloscbitow; u <8; u++)
+                            {
+                                znaki[pozycja] = kolory[z][u];
+                                pozycja++;
+                            }
+                        }
                     }
                 }
                 Byte[] LiteryWBajtach = new Byte[znaki.Length/8];
@@ -275,7 +303,10 @@ namespace KodowanieLSB
         private void HelpKod_Click(object sender, RoutedEventArgs e)
         {
             char c = (char)10;
-            MessageBox.Show("");
+            MessageBox.Show("Program krzysta z algorytmu Least Sginificant Bit i służy do kodowania i dekodowania wiadomości w plikach przekształconych w bitmapę."+c+
+                "Koder zastępuje wybraną ilość bitów każdej z trzech składowych RGB pikseli w podanym pliku dopóki nie zakoduje całej wiadomości - im więcej bitów zastąpionych w danej składowej tym bardziej zakodowany obraz będzie się różnił od oryginału."+c+
+                "Dekoder odczytuje zakodowaną wiadomość w ten sam sposób."+c+
+                "Wszystkie polskie znaki zostaną zastąpione odpowiadającym im znakom z zakresu ASCII.");
         }
     }
 }
