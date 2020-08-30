@@ -1,0 +1,54 @@
+﻿<Page x:Class="LSBEncoding.Pages.DecoderPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LSBEncoding.Pages"
+      mc:Ignorable="d" 
+      Title="DecoderPage">
+    <Page.Resources>
+        <Style TargetType="{x:Type TextBlock }">
+            <Setter Property="Margin" Value="10,10,0,0"/>
+        </Style>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
+            <Setter Property="Margin" Value="10,10,0,0"/>
+        </Style>
+        <Style TargetType="{x:Type Button }" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+            <Setter Property="Margin" Value="10,10,0,0"/>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <StackPanel>
+            <DockPanel LastChildFill="False">
+                <TextBlock x:Name="imageToDecodeFilePathTextBlock" TextWrapping="Wrap" Text="File path to image with text to decode:" />
+                <Button x:Name="imageToDecodeChooseFilePathButton" Content="Choose file" Click="imageToDecodeChooseFilePathButton_Click" DockPanel.Dock="Right"/>
+                <Button x:Name="helpButton" Content="Help" Click="helpButton_Click" DockPanel.Dock="Right"/>
+            </DockPanel>
+            <TextBox x:Name="imageToDecodeFilePathTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" IsEnabled="False" MinWidth="500"  TextChanged="imageToDecodeFilePathTextBox_TextChanged"/>
+            <DockPanel LastChildFill="False">
+                <TextBlock x:Name="decodedStringSaveFileFilePathTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="File path to save decoded text:" VerticalAlignment="Top"/>
+                <Button x:Name="decodedStringSaveFileChooseFilePathButton" Content="Choose file" Click="decodedStringSaveFileChooseFilePathButton_Click" DockPanel.Dock="Right"/>
+            </DockPanel>
+            <TextBox x:Name="decodedStringSaveFileFilePathTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" MinWidth="500"  TextChanged="decodedStringSaveFileFilePathTextBox_TextChanged"/>
+            <DockPanel LastChildFill="False">
+                <TextBlock x:Name="decodedStringTextBlock" TextWrapping="Wrap" Text="Decoded text:"/>
+                <Button x:Name="saveDecodedStringToFileButton" Content="Save decoded text" Click="saveDecodedStringToFileButton_Click" IsEnabled="False" DockPanel.Dock="Right"/>
+                <Button x:Name="decodeButton" Content="Decode" Click="decodeButton_Click" IsEnabled="False" DockPanel.Dock="Right"/>
+            </DockPanel>
+            <TextBox x:Name="decodedStringTextBox" MaxHeight="500" TextWrapping="Wrap" MinWidth="500" MaxWidth="1200"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="LSBNumberComboBoxDescriptionTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Number of bits of every RGB color that will be used to decode:" VerticalAlignment="Top"/>
+                <ComboBox x:Name="LSBNumberComboBox" Margin="10,0,0,0">
+                    <ComboBoxItem Content="8" IsSelected="true"/>
+                    <ComboBoxItem Content="7"/>
+                    <ComboBoxItem Content="6"/>
+                    <ComboBoxItem Content="5"/>
+                    <ComboBoxItem Content="4"/>
+                    <ComboBoxItem Content="3"/>
+                    <ComboBoxItem Content="2"/>
+                    <ComboBoxItem Content="1"/>
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

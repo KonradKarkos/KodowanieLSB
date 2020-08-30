@@ -1,0 +1,54 @@
+﻿<Page x:Class="LSBEncoding.Pages.EncoderPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LSBEncoding.Pages"
+      mc:Ignorable="d" 
+      Title="EncoderPage">
+    <Page.Resources>
+        <Style TargetType="{x:Type TextBlock }">
+            <Setter Property="Margin" Value="10,10,0,0"/>
+        </Style>
+        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
+            <Setter Property="Margin" Value="10,10,0,0"/>
+        </Style>
+        <Style TargetType="{x:Type Button }" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+            <Setter Property="Margin" Value="10,10,0,0"/>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <StackPanel>
+            <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
+                <TextBlock x:Name="toEncodeInImageFilePathTextBlock" TextWrapping="Wrap" Text="File path of image to encode text in:"/>
+                <Button x:Name="toEncodeInImageChooseFilePathButton" Content="Choose file" Click="toEncodeInImageChooseFilePathButton_Click" DockPanel.Dock="Right"/>
+                <Button x:Name="helpButton" Content="Help" Click="helpButton_Click" DockPanel.Dock="Right"/>
+            </DockPanel>
+            <TextBox x:Name="toEncodeInImageFilePathTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" MinWidth="500" IsEnabled="False" TextChanged="toEncodeANDSaveEncodedInImageFilePathTextBox_TextChanged"/>
+            <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
+                <TextBlock x:Name="saveEncodedImageFilePathTextBlock" TextWrapping="Wrap" Text="File path to save image with encoded text:"/>
+                <Button x:Name="saveEncodedImageChooseFilePathButton" Content="Choose file" Click="saveEncodedImageChooseFilePathButton_Click" DockPanel.Dock="Right"/>
+            </DockPanel>
+            <TextBox x:Name="saveEncodedImageFilePathTextBox" TextWrapping="Wrap" MinWidth="500" HorizontalAlignment="Stretch" TextChanged="toEncodeANDSaveEncodedInImageFilePathTextBox_TextChanged"/>
+            <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
+                <TextBlock x:Name="stringToEncodeTextBlock" TextWrapping="Wrap" Text="Text to encode:"/>
+                <Button x:Name="loadStringToEncodeFromFileButton" Content="Load text from file" Click="loadStringToEncodeFromFileButton_Click" DockPanel.Dock="Right"/>
+                <Button x:Name="encodeButton" Content="Encode" Click="encodeButton_Click" IsEnabled="False" DockPanel.Dock="Right"/>
+            </DockPanel>
+            <TextBox x:Name="stringToEncodeTextBox" TextWrapping="Wrap" MaxHeight="500" MinWidth="500" MaxWidth="1200"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="LSBNumberComboBoxDescriptionTextBlock" TextWrapping="Wrap" Text="Number of bits of every RGB color that will be used to encode:" VerticalAlignment="Top"/>
+                <ComboBox x:Name="LSBNumberComboBox" Margin="10,0,0,0" Style="{DynamicResource MaterialDesignComboBox}">
+                    <ComboBoxItem Content="8" IsSelected="true"></ComboBoxItem>
+                    <ComboBoxItem Content="7"></ComboBoxItem>
+                    <ComboBoxItem Content="6"></ComboBoxItem>
+                    <ComboBoxItem Content="5"></ComboBoxItem>
+                    <ComboBoxItem Content="4"></ComboBoxItem>
+                    <ComboBoxItem Content="3"></ComboBoxItem>
+                    <ComboBoxItem Content="2"></ComboBoxItem>
+                    <ComboBoxItem Content="1"></ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>
