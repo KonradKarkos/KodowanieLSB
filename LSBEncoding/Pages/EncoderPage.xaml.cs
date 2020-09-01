@@ -92,7 +92,7 @@ namespace LSBEncoding.Pages
             {
                 Bitmap toEncodeInImage = new Bitmap(toEncodeInImageFilePathTextBox.Text);
                 int stringToEncodeLengthInBits = stringToEncodeTextBox.Text.Length * 8;
-                int useBitsToEncode = (((ComboBoxItem)LSBNumberComboBox.SelectedItem).Content.ToString()[0]) - '0';
+                int useBitsToEncode = ((ComboBoxItem)LSBNumberComboBox.SelectedItem).Content.ToString()[0] - '0';
                 if (stringToEncodeLengthInBits > toEncodeInImage.Height * toEncodeInImage.Width * useBitsToEncode)
                 {
                     MessageBox.Show("String is to long to encode with such options in choosen picture", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -158,10 +158,9 @@ namespace LSBEncoding.Pages
 
         private void helpButton_Click(object sender, RoutedEventArgs e)
         {
-            char c = (char)10;
-            MessageBox.Show("Application uses Least Sginificant Bit to encode and decode text in/from images converted into bitmap." + c +
-                "Encoder swaps choosen number of bits of every RGB component of color with text converted to bitarray till all text bits have been swapped - the more bits of every RGB component have been swapped the more will resulting image differ from original one." + c +
-                "Decoder reads message by reading choosen number of bits from every pixel RGB components and converting them into text." + c +
+            MessageBox.Show("Application uses Least Sginificant Bit to encode and decode text in/from images converted into bitmap.\n" +
+                "Encoder swaps choosen number of bits of every RGB component of color with text converted to bitarray till all text bits have been swapped - the more bits of every RGB component have been swapped the more will resulting image differ from original one.\n" +
+                "Decoder reads message by reading choosen number of bits from every pixel RGB components and converting them into text.\n" +
                 "All characters outside of ASCII will be changed into most corresponding ASCII characters.");
         }
 

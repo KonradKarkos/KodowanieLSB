@@ -65,13 +65,13 @@
                     <ListViewItem x:Name="encoderListViewItem" Height="60">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="EnhancedEncryption" Height="25" Width="25" Margin="10"/>
-                            <TextBlock Text="Encryptor" VerticalAlignment="Center"  Margin="20,10"/>
+                            <TextBlock Text="Encoder" VerticalAlignment="Center"  Margin="20,10"/>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem x:Name="decoderListViewItem" >
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Backspace" Height="25" Width="25" Margin="10"/>
-                            <TextBlock Text="Decryptor" VerticalAlignment="Center" Margin="20,10"/>
+                            <TextBlock Text="Decoder" VerticalAlignment="Center" Margin="20,10"/>
                         </StackPanel>
                     </ListViewItem>
                 </ListView>
