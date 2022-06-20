@@ -44,7 +44,7 @@ namespace LSBEncoding.Pages
             if (openFileDialog.ShowDialog() == true)
             {
                 Plik = openFileDialog.FileName;
-                StreamReader streamReader = new StreamReader(Plik, System.Text.Encoding.GetEncoding(1250));
+                StreamReader streamReader = new StreamReader(Plik, Encoding.GetEncoding(1250));
                 StringBuilder stringBuilder = new StringBuilder();
                 String loadedLine;
                 while ((loadedLine = streamReader.ReadLine()) != null)
@@ -108,35 +108,35 @@ namespace LSBEncoding.Pages
                     Color pixelToEncode;
                     BitArray[] pixelColorRGBArrays = new BitArray[3];
                     int[] encodedPixelColorRGB = new int[3];
-                    for (int i = 0; i < imageWidth; i++)
+                    for (int widthIndex = 0; widthIndex < imageWidth; widthIndex++)
                     {
-                        for (int j = 0; j < imageHeight; j++)
+                        for (int heightIndex = 0; heightIndex < imageHeight; heightIndex++)
                         {
-                            pixelToEncode = toEncodeInImage.GetPixel(i, j);
+                            pixelToEncode = toEncodeInImage.GetPixel(widthIndex, heightIndex);
                             if (bitsToEncodeIndex < stringToEncodeLengthInBits)
                             {
                                 pixelColorRGBArrays[0] = new BitArray(new byte[] { pixelToEncode.R });
                                 pixelColorRGBArrays[1] = new BitArray(new byte[] { pixelToEncode.G });
                                 pixelColorRGBArrays[2] = new BitArray(new byte[] { pixelToEncode.B });
-                                for (int z = 0; z < 3; z++)
+                                for (int colorIndex = 0; colorIndex < 3; colorIndex++)
                                 {
-                                    for (int u = 7 - (useBitsToEncode - 1); u < 8; u++)
+                                    for (int bitIndex = 0; bitIndex < useBitsToEncode; bitIndex++)
                                     {
                                         if (bitsToEncodeIndex < stringToEncodeLengthInBits)
                                         {
-                                            pixelColorRGBArrays[z][u] = bitsToEncode[bitsToEncodeIndex];
+                                            pixelColorRGBArrays[colorIndex][bitIndex] = bitsToEncode[bitsToEncodeIndex];
                                             bitsToEncodeIndex++;
                                         }
                                         else break;
                                     }
                                 }
-                                for (int z = 0; z < 3; z++)
+                                for (int bitIndex = 0; bitIndex < 3; bitIndex++)
                                 {
-                                    pixelColorRGBArrays[z].CopyTo(encodedPixelColorRGB, z);
+                                    pixelColorRGBArrays[bitIndex].CopyTo(encodedPixelColorRGB, bitIndex);
                                 }
                                 pixelToEncode = Color.FromArgb(encodedPixelColorRGB[0], encodedPixelColorRGB[1], encodedPixelColorRGB[2]);
                             }
-                            encodedImage.SetPixel(i, j, pixelToEncode);
+                            encodedImage.SetPixel(widthIndex, heightIndex, pixelToEncode);
                         }
                     }
                     encodedImage.Save(saveEncodedImageFilePathTextBox.Text);

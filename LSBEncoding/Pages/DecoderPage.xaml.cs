@@ -52,19 +52,19 @@ namespace LSBEncoding.Pages
                 BitArray[] encodedPixelColorRGBArrays = new BitArray[3];
                 BitArray decodedBits = new BitArray(imageWidth * imageHeight * readBitsToDecode * 3);
                 int bitsToDecodeIndex = 0;
-                for (int i = 0; i < imageWidth; i++)
+                for (int widthIndex = 0; widthIndex < imageWidth; widthIndex++)
                 {
-                    for (int j = 0; j < imageHeight; j++)
+                    for (int heightIndex = 0; heightIndex < imageHeight; heightIndex++)
                     {
-                        pixelToDecode = imageToDecode.GetPixel(i, j);
+                        pixelToDecode = imageToDecode.GetPixel(widthIndex, heightIndex);
                         encodedPixelColorRGBArrays[0] = new BitArray(new byte[] { pixelToDecode.R });
                         encodedPixelColorRGBArrays[1] = new BitArray(new byte[] { pixelToDecode.G });
                         encodedPixelColorRGBArrays[2] = new BitArray(new byte[] { pixelToDecode.B });
-                        for (int z = 0; z < 3; z++)
+                        for (int colorIndex = 0; colorIndex < 3; colorIndex++)
                         {
-                            for (int u = 7 - (readBitsToDecode - 1); u < 8; u++)
+                            for (int bitIndex = 0; bitIndex < readBitsToDecode; bitIndex++)
                             {
-                                decodedBits[bitsToDecodeIndex] = encodedPixelColorRGBArrays[z][u];
+                                decodedBits[bitsToDecodeIndex] = encodedPixelColorRGBArrays[colorIndex][bitIndex];
                                 bitsToDecodeIndex++;
                             }
                         }
