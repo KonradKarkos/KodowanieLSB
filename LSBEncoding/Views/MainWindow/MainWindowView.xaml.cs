@@ -1,19 +1,19 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using LSBEncoding.Pages.DecoderPage;
-using LSBEncoding.Pages.EncoderPage;
+using LSBEncoding.Views.DecoderView;
+using LSBEncoding.Views.EncoderView;
 
-namespace LSBEncoding.Pages.MainWindow
+namespace LSBEncoding.Views.MainWindow
 {
     public partial class MainWindowView : Window
     {
-        private EncoderPageView EncoderPage;
-        private DecoderPageView DecoderPage;
+        private EncoderViewModel EncoderPage;
+        private DecoderViewModel DecoderPage;
         public MainWindowView()
         {
             InitializeComponent();
-            DecoderPage = new DecoderPageView();
-            EncoderPage = new EncoderPageView();
+            DecoderPage = new DecoderViewModel();
+            EncoderPage = new EncoderViewModel();
         }
         private void openMenuButton_Click(object sender, RoutedEventArgs e)
         {

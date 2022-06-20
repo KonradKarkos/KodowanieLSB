@@ -8,11 +8,11 @@ using System.Windows;
 using System.Windows.Controls;
 using Color = System.Drawing.Color;
 
-namespace LSBEncoding.Pages.DecoderPage
+namespace LSBEncoding.Views.DecoderView
 {
-    public partial class DecoderPageView : Page
+    public partial class DecoderView : UserControl
     {
-        public DecoderPageView()
+        public DecoderView()
         {
             InitializeComponent();
         }

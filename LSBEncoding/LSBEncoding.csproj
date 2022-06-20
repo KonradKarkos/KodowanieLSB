@@ -79,7 +79,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Pages\MainWindow\MainWindowView.xaml">
+    <Page Include="Views\MainWindow\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -87,29 +87,29 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Pages\DecoderPage\DecoderPageViewModel.cs" />
-    <Compile Include="Pages\EncoderPage\EncoderPageViewModel.cs" />
-    <Compile Include="Pages\MainWindow\MainWindowView.xaml.cs">
+    <Compile Include="Views\DecoderView\DecoderViewModel.cs" />
+    <Compile Include="Views\EncoderView\EncoderViewModel.cs" />
+    <Compile Include="Views\MainWindow\MainWindowView.xaml.cs">
       <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\DecoderPage\DecoderPageView.xaml">
+    <Page Include="Views\DecoderView\DecoderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\EncoderPage\EncoderPageView.xaml">
+    <Page Include="Views\EncoderView\EncoderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pages\DecoderPage\DecoderPageView.xaml.cs">
-      <DependentUpon>DecoderPageView.xaml</DependentUpon>
+    <Compile Include="Views\DecoderView\DecoderView.xaml.cs">
+      <DependentUpon>DecoderView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\EncoderPage\EncoderPageView.xaml.cs">
-      <DependentUpon>EncoderPageView.xaml</DependentUpon>
+    <Compile Include="Views\EncoderView\EncoderView.xaml.cs">
+      <DependentUpon>EncoderView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\MainWindow\MainWindowViewModel.cs" />
+    <Compile Include="Views\MainWindow\MainWindowViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

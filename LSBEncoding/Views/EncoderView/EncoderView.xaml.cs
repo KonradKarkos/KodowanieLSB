@@ -9,11 +9,11 @@ using System.Windows;
 using System.Windows.Controls;
 using Color = System.Drawing.Color;
 
-namespace LSBEncoding.Pages.EncoderPage
+namespace LSBEncoding.Views.EncoderView
 {
-    public partial class EncoderPageView : Page
+    public partial class EncoderView : UserControl
     {
-        public EncoderPageView()
+        public EncoderView()
         {
             InitializeComponent();
         }

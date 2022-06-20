@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LSBEncoding.Pages.DecoderPage
+namespace LSBEncoding.Views.MainWindow
 {
-    class DecoderPageViewModel
+    class MainWindowViewModel
     {
     }
 }

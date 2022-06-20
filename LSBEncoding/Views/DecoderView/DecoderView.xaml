@@ -1,12 +1,11 @@
-﻿<Page x:Class="LSBEncoding.Pages.DecoderPage.DecoderPageView"
+﻿<UserControl x:Class="LSBEncoding.Views.DecoderView.DecoderView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:LSBEncoding.Pages"
-      mc:Ignorable="d" 
-      Title="DecoderPage">
-    <Page.Resources>
+      xmlns:local="clr-namespace:LSBEncoding.Views.DecoderView"
+      mc:Ignorable="d">
+    <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock }">
             <Setter Property="Margin" Value="10,10,0,0"/>
         </Style>
@@ -16,7 +15,7 @@
         <Style TargetType="{x:Type Button }" BasedOn="{StaticResource MaterialDesignRaisedButton}">
             <Setter Property="Margin" Value="10,10,0,0"/>
         </Style>
-    </Page.Resources>
+    </UserControl.Resources>
     <Grid>
         <StackPanel>
             <DockPanel LastChildFill="False">
@@ -51,4 +50,4 @@
             </StackPanel>
         </StackPanel>
     </Grid>
-</Page>
+</UserControl>
