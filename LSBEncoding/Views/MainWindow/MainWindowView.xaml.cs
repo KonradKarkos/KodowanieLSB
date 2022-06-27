@@ -1,19 +1,13 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
-using LSBEncoding.Views.DecoderView;
-using LSBEncoding.Views.EncoderView;
 
 namespace LSBEncoding.Views.MainWindow
 {
     public partial class MainWindowView : Window
     {
-        private EncoderViewModel EncoderPage;
-        private DecoderViewModel DecoderPage;
         public MainWindowView()
         {
+            DataContext = new MainWindowViewModel();
             InitializeComponent();
-            DecoderPage = new DecoderViewModel();
-            EncoderPage = new EncoderViewModel();
         }
         private void openMenuButton_Click(object sender, RoutedEventArgs e)
         {
@@ -25,22 +19,6 @@ namespace LSBEncoding.Views.MainWindow
         {
             closeMenuButton.Visibility = Visibility.Collapsed;
             openMenuButton.Visibility = Visibility.Visible;
-        }
-
-        private void listViewMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-            switch (((ListViewItem)((ListView)sender).SelectedItem).Name)
-            {
-                case "encoderListViewItem":
-                    mainFrame.Content = EncoderPage;
-                    break;
-                case "decoderListViewItem":
-                    mainFrame.Content = DecoderPage;
-                    break;
-                default:
-                    break;
-            }
         }
 
     }

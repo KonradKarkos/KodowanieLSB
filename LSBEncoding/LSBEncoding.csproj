@@ -79,6 +79,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\PrefilledMessageBox.cs" />
+    <Compile Include="Views\PropertyNotifierClass.cs" />
     <Page Include="Views\MainWindow\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -87,6 +89,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\BindableCommand.cs" />
+    <Compile Include="Views\BaseViewModel.cs" />
     <Compile Include="Views\DecoderView\DecoderViewModel.cs" />
     <Compile Include="Views\EncoderView\EncoderViewModel.cs" />
     <Compile Include="Views\MainWindow\MainWindowView.xaml.cs">

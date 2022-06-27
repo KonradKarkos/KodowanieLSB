@@ -17,35 +17,27 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <StackPanel>
+        <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <DockPanel LastChildFill="False">
                 <TextBlock x:Name="imageToDecodeFilePathTextBlock" TextWrapping="Wrap" Text="File path to image with text to decode:" />
-                <Button x:Name="imageToDecodeChooseFilePathButton" Content="Choose file" Click="imageToDecodeChooseFilePathButton_Click" DockPanel.Dock="Right"/>
-                <Button x:Name="helpButton" Content="Help" Click="helpButton_Click" DockPanel.Dock="Right"/>
+                <Button x:Name="imageToDecodeChooseFilePathButton" Content="Choose file" Command="{Binding ChooseEncodedImageFilePathCommand}" DockPanel.Dock="Right"/>
+                <Button x:Name="helpButton" Content="Help" Command="{Binding HelpCommand}" DockPanel.Dock="Right"/>
             </DockPanel>
-            <TextBox x:Name="imageToDecodeFilePathTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" IsEnabled="False" MinWidth="500"  TextChanged="imageToDecodeFilePathTextBox_TextChanged"/>
+            <TextBox x:Name="imageToDecodeFilePathTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" IsEnabled="False" MinWidth="500"  TextChanged="imageToDecodeFilePathTextBox_TextChanged" Text="{Binding EncodedImageFilePath}"/>
             <DockPanel LastChildFill="False">
                 <TextBlock x:Name="decodedStringSaveFileFilePathTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="File path to save decoded text:" VerticalAlignment="Top"/>
-                <Button x:Name="decodedStringSaveFileChooseFilePathButton" Content="Choose file" Click="decodedStringSaveFileChooseFilePathButton_Click" DockPanel.Dock="Right"/>
+                <Button x:Name="decodedStringSaveFileChooseFilePathButton" Content="Choose file" Command="{Binding ChooseTextFileCommand}" DockPanel.Dock="Right"/>
             </DockPanel>
-            <TextBox x:Name="decodedStringSaveFileFilePathTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" MinWidth="500"  TextChanged="decodedStringSaveFileFilePathTextBox_TextChanged"/>
+            <TextBox x:Name="decodedStringSaveFileFilePathTextBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" MinWidth="500"  TextChanged="decodedStringSaveFileFilePathTextBox_TextChanged" Text="{Binding TxtFilePath}"/>
             <DockPanel LastChildFill="False">
                 <TextBlock x:Name="decodedStringTextBlock" TextWrapping="Wrap" Text="Decoded text:"/>
-                <Button x:Name="saveDecodedStringToFileButton" Content="Save decoded text" Click="saveDecodedStringToFileButton_Click" IsEnabled="False" DockPanel.Dock="Right"/>
-                <Button x:Name="decodeButton" Content="Decode" Click="decodeButton_Click" IsEnabled="False" DockPanel.Dock="Right"/>
+                <Button x:Name="saveDecodedStringToFileButton" Content="Save decoded text" Command="{Binding SaveTextToFileCommand}" IsEnabled="False" DockPanel.Dock="Right"/>
+                <Button x:Name="decodeButton" Content="Decode" Command="{Binding MainActionCommand}" IsEnabled="False" DockPanel.Dock="Right"/>
             </DockPanel>
-            <TextBox x:Name="decodedStringTextBox" MaxHeight="500" TextWrapping="Wrap" MinWidth="500" MaxWidth="1200"/>
+            <TextBox x:Name="decodedStringTextBox" MaxHeight="500" TextWrapping="Wrap" MinWidth="500" MaxWidth="1200" Text="{Binding MainString}"/>
             <StackPanel Orientation="Horizontal">
                 <TextBlock x:Name="LSBNumberComboBoxDescriptionTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Number of bits of every RGB color that will be used to decode:" VerticalAlignment="Top"/>
-                <ComboBox x:Name="LSBNumberComboBox" Margin="10,0,0,0">
-                    <ComboBoxItem Content="8" IsSelected="true"/>
-                    <ComboBoxItem Content="7"/>
-                    <ComboBoxItem Content="6"/>
-                    <ComboBoxItem Content="5"/>
-                    <ComboBoxItem Content="4"/>
-                    <ComboBoxItem Content="3"/>
-                    <ComboBoxItem Content="2"/>
-                    <ComboBoxItem Content="1"/>
+                <ComboBox x:Name="LSBNumberComboBox" Margin="10,0,0,0"  ItemsSource="{Binding BitComboBoxItems}" SelectedItem="{Binding SelectedBitNumber}">
                 </ComboBox>
             </StackPanel>
         </StackPanel>
