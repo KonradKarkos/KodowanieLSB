@@ -9,18 +9,6 @@ namespace LSBEncoding.Views.MainWindow
             DataContext = new MainWindowViewModel();
             InitializeComponent();
         }
-        private void openMenuButton_Click(object sender, RoutedEventArgs e)
-        {
-            closeMenuButton.Visibility = Visibility.Visible;
-            openMenuButton.Visibility = Visibility.Collapsed;
-        }
-
-        private void closeMenuButton_Click(object sender, RoutedEventArgs e)
-        {
-            closeMenuButton.Visibility = Visibility.Collapsed;
-            openMenuButton.Visibility = Visibility.Visible;
-        }
-
     }
 
 }

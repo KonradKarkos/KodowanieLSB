@@ -1,12 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections;
-using System.Drawing;
-using System.IO;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using Color = System.Drawing.Color;
+﻿using System.Windows.Controls;
 
 namespace LSBEncoding.Views.DecoderView
 {

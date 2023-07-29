@@ -6,32 +6,47 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows;
 
 namespace LSBEncoding.Views.EncoderView
 {
+    /// <summary>
+    /// View model for encoding view
+    /// </summary>
     public class EncoderViewModel : BaseViewModel
     {
+        /// <inheritdoc/>
         public EncoderViewModel() : base()
         {
             ChooseImageToEncodeFilePathCommand = new BindableCommand(OnChooseToEncodeImageFilePathClick);
         }
 
+        /// <summary>
+        /// Variable holding complete filepath of image to have text encoded in
+        /// </summary>
         private string toEncodeImageFilePath;
+        /// <summary>
+        /// Accessor for complete filepath of image to have text encoded in
+        /// </summary>
         public string ToEncodeImageFilePath
         {
             get => toEncodeImageFilePath;
             set => SetProperty(ref toEncodeImageFilePath, value);
         }
 
+        /// <summary>
+        /// Command fired after clickng on choose image button
+        /// </summary>
         public BindableCommand ChooseImageToEncodeFilePathCommand { get; set; }
-
+        /// <summary>
+        /// Sets filepaths for image files
+        /// </summary>
         private void OnChooseToEncodeImageFilePathClick()
         {
             ToEncodeImageFilePath = SelectImageFilePath();
             EncodedImageFilePath = ToEncodeImageFilePath.Insert(ToEncodeImageFilePath.Length - 4, "Encoded");
         }
 
+        /// <inheritdoc/>
         protected override void OnChooseTextFileClick()
         {
             base.OnChooseTextFileClick();
@@ -52,73 +67,92 @@ namespace LSBEncoding.Views.EncoderView
             PrefilledMessageBox.ShowInformation("Successfully loaded text file.");
         }
 
+        /// <inheritdoc/>
         protected override void OnMainActionClick()
         {
-            if (File.Exists(ToEncodeImageFilePath))
-            {
-                using (Bitmap toEncodeInImage = new Bitmap(ToEncodeImageFilePath))
-                {
-                    int stringToEncodeLengthInBits = MainString.Length * 8;
-                    int useBitsToEncode = SelectedBitNumber;
-                    if (stringToEncodeLengthInBits > toEncodeInImage.Height * toEncodeInImage.Width * useBitsToEncode)
-                    {
-                        PrefilledMessageBox.ShowError("String is to long to encode with such options in choosen picture");
-                    }
-                    else
-                    {
-                        int imageWidth = toEncodeInImage.Width;
-                        int imageHeight = toEncodeInImage.Height;
-                        using (Bitmap encodedImage = new Bitmap(imageWidth, imageHeight))
-                        {
-                            MainString = ReplaceSpecialLetters(MainString);
-                            BitArray bitsToEncode = new BitArray(Encoding.ASCII.GetBytes(MainString));
-                            int bitsToEncodeIndex = 0;
-                            Color pixelToEncode;
-                            BitArray[] pixelColorRGBArrays = new BitArray[3];
-                            int[] encodedPixelColorRGB = new int[3];
-                            for (int widthIndex = 0; widthIndex < imageWidth; widthIndex++)
-                            {
-                                for (int heightIndex = 0; heightIndex < imageHeight; heightIndex++)
-                                {
-                                    pixelToEncode = toEncodeInImage.GetPixel(widthIndex, heightIndex);
-                                    if (bitsToEncodeIndex < stringToEncodeLengthInBits)
-                                    {
-                                        pixelColorRGBArrays[0] = new BitArray(new byte[] { pixelToEncode.R });
-                                        pixelColorRGBArrays[1] = new BitArray(new byte[] { pixelToEncode.G });
-                                        pixelColorRGBArrays[2] = new BitArray(new byte[] { pixelToEncode.B });
-                                        for (int colorIndex = 0; colorIndex < 3; colorIndex++)
-                                        {
-                                            for (int bitIndex = 0; bitIndex < useBitsToEncode; bitIndex++)
-                                            {
-                                                if (bitsToEncodeIndex < stringToEncodeLengthInBits)
-                                                {
-                                                    pixelColorRGBArrays[colorIndex][bitIndex] = bitsToEncode[bitsToEncodeIndex];
-                                                    bitsToEncodeIndex++;
-                                                }
-                                                else break;
-                                            }
-                                        }
-                                        for (int bitIndex = 0; bitIndex < 3; bitIndex++)
-                                        {
-                                            pixelColorRGBArrays[bitIndex].CopyTo(encodedPixelColorRGB, bitIndex);
-                                        }
-                                        pixelToEncode = Color.FromArgb(encodedPixelColorRGB[0], encodedPixelColorRGB[1], encodedPixelColorRGB[2]);
-                                    }
-                                    encodedImage.SetPixel(widthIndex, heightIndex, pixelToEncode);
-                                }
-                            }
-                            encodedImage.Save(EncodedImageFilePath);
-                        }
-                    }
-                    PrefilledMessageBox.ShowInformation("Text has been successfully encoded");
-                }
-            }
-            else
+            if (!File.Exists(ToEncodeImageFilePath))
             {
                 PrefilledMessageBox.ShowError("Image choosen to encode does not exist");
+                return;
+            }
+            using (Bitmap toEncodeInImage = new Bitmap(ToEncodeImageFilePath))
+            {
+                MainString = ReplaceSpecialLetters(MainString);
+                BitArray bitsToEncode = new BitArray(Encoding.ASCII.GetBytes(MainString));
+                int useBitsToEncode = SelectedBitNumber;
+
+                if (bitsToEncode.Count > toEncodeInImage.Height * toEncodeInImage.Width * useBitsToEncode)
+                {
+                    PrefilledMessageBox.ShowError("String is to long to encode with such options in choosen picture");
+                    return;
+                }
+
+                using (Bitmap encodedImage = EncodeBitsInImage(toEncodeInImage, bitsToEncode, useBitsToEncode))
+                {
+                    encodedImage.Save(EncodedImageFilePath);
+                }
+
+                PrefilledMessageBox.ShowInformation("Text has been successfully encoded");
             }
         }
 
+        /// <summary>
+        /// Encodes goven bits in given image
+        /// </summary>
+        /// <param name="toEncodeInImage">Image for encoding</param>
+        /// <param name="bitsToEncode">Message to encode in bits</param>
+        /// <param name="useBitsToEncode">Indicator how many bits of every RGB color should be used in encoding</param>
+        /// <returns>Provided image with message encoded in it</returns>
+        private Bitmap EncodeBitsInImage(Bitmap toEncodeInImage, BitArray bitsToEncode, int useBitsToEncode)
+        {
+            int imageWidth = toEncodeInImage.Width;
+            int imageHeight = toEncodeInImage.Height;
+            Bitmap encodedImage = new Bitmap(imageWidth, imageHeight);
+            int bitsToEncodeIndex = 0;
+            Color pixelToEncode;
+            BitArray[] pixelColorRGBArrays = new BitArray[3];
+            int[] encodedPixelColorRGB = new int[3];
+
+            for (int widthIndex = 0; widthIndex < imageWidth; widthIndex++)
+            {
+                for (int heightIndex = 0; heightIndex < imageHeight; heightIndex++)
+                {
+                    pixelToEncode = toEncodeInImage.GetPixel(widthIndex, heightIndex);
+                    if (bitsToEncodeIndex < bitsToEncode.Count)
+                    {
+                        pixelColorRGBArrays[0] = new BitArray(new byte[] { pixelToEncode.R });
+                        pixelColorRGBArrays[1] = new BitArray(new byte[] { pixelToEncode.G });
+                        pixelColorRGBArrays[2] = new BitArray(new byte[] { pixelToEncode.B });
+                        for (int colorIndex = 0; colorIndex < 3; colorIndex++)
+                        {
+                            for (int bitIndex = 0; bitIndex < useBitsToEncode; bitIndex++)
+                            {
+                                if (bitsToEncodeIndex < bitsToEncode.Count)
+                                {
+                                    pixelColorRGBArrays[colorIndex][bitIndex] = bitsToEncode[bitsToEncodeIndex];
+                                    bitsToEncodeIndex++;
+                                }
+                                else break;
+                            }
+                        }
+                        for (int bitIndex = 0; bitIndex < 3; bitIndex++)
+                        {
+                            pixelColorRGBArrays[bitIndex].CopyTo(encodedPixelColorRGB, bitIndex);
+                        }
+                        pixelToEncode = Color.FromArgb(encodedPixelColorRGB[0], encodedPixelColorRGB[1], encodedPixelColorRGB[2]);
+                    }
+                    encodedImage.SetPixel(widthIndex, heightIndex, pixelToEncode);
+                }
+            }
+
+            return encodedImage;
+        }
+
+        /// <summary>
+        /// Replaces special letters from most known alphabetes to the ASCII ones for esiaer encoding
+        /// </summary>
+        /// <param name="strMessage">String to encode</param>
+        /// <returns>String with replaced special letters</returns>
         private String ReplaceSpecialLetters(String strMessage)
         {
             strMessage = Regex.Replace(strMessage, "[éèëêðę]", "e");

@@ -61,10 +61,10 @@
                             <TranslateTransform/>
                         </TransformGroup>
                     </Grid.RenderTransform>
-                    <Button x:Name="openMenuButton" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#009FAF" Click="openMenuButton_Click">
+                    <Button x:Name="openMenuButton" Visibility="{Binding OpenMenuButtonVisibility}" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#009FAF" Command="{Binding ChangeMenuButtonVisibilityCommand}">
                         <materialDesign:PackIcon Kind="Menu" Width="25" Height="25"/>
                     </Button>
-                    <Button x:Name="closeMenuButton" Visibility="Collapsed" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#009FAF" Click="closeMenuButton_Click">
+                    <Button x:Name="closeMenuButton" Visibility="{Binding CloseMenuButtonVisibility}" Height="60" Width="60" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#009FAF" Command="{Binding ChangeMenuButtonVisibilityCommand}">
                         <materialDesign:PackIcon Kind="ArrowLeft" Width="25" Height="25"/>
                     </Button>
                     <Image Height="80" VerticalAlignment="Bottom"/>
