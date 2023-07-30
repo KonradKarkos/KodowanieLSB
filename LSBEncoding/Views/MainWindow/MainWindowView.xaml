@@ -8,7 +8,7 @@
         xmlns:encoderView="clr-namespace:LSBEncoding.Views.EncoderView"
         xmlns:local="clr-namespace:LSBEncoding"
         mc:Ignorable="d"
-        Title="Least Significant Bit Encoder" Height="400" Width="600">
+        Title="Least Significant Bit Encoder">
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="gridMenu">
@@ -38,7 +38,7 @@
         </EventTrigger>
     </Window.Triggers>
     <Grid Background="#FFDEDEDE">
-        <StackPanel HorizontalAlignment="Left" Margin="70,60,0,0">
+        <StackPanel HorizontalAlignment="Stretch" Margin="70,60,10,10">
             <ContentControl x:Name="mainFrame" Content="{Binding CurrentViewModel}"></ContentControl>
         </StackPanel>
         <Grid Height="60" VerticalAlignment="Top" Background="#9A67EA">

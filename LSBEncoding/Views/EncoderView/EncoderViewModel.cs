@@ -1,11 +1,11 @@
 ﻿using LSBEncoding.Commands;
 using LSBEncoding.Utils;
-using System;
 using System.Collections;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace LSBEncoding.Views.EncoderView
 {
@@ -68,7 +68,7 @@ namespace LSBEncoding.Views.EncoderView
         }
 
         /// <inheritdoc/>
-        protected override void OnMainActionClick()
+        protected override void PerformCoding()
         {
             if (!File.Exists(ToEncodeImageFilePath))
             {
@@ -107,6 +107,9 @@ namespace LSBEncoding.Views.EncoderView
         {
             int imageWidth = toEncodeInImage.Width;
             int imageHeight = toEncodeInImage.Height;
+            SetPBValues(imageWidth);
+            ProgressBarVisibility = Visibility.Visible;
+
             Bitmap encodedImage = new Bitmap(imageWidth, imageHeight);
             int bitsToEncodeIndex = 0;
             Color pixelToEncode;
@@ -143,6 +146,7 @@ namespace LSBEncoding.Views.EncoderView
                     }
                     encodedImage.SetPixel(widthIndex, heightIndex, pixelToEncode);
                 }
+                _worker.ReportProgress(1);
             }
 
             return encodedImage;
@@ -153,7 +157,7 @@ namespace LSBEncoding.Views.EncoderView
         /// </summary>
         /// <param name="strMessage">String to encode</param>
         /// <returns>String with replaced special letters</returns>
-        private String ReplaceSpecialLetters(String strMessage)
+        private string ReplaceSpecialLetters(string strMessage)
         {
             strMessage = Regex.Replace(strMessage, "[éèëêðę]", "e");
             strMessage = Regex.Replace(strMessage, "[ÉÈËÊĘ]", "E");

@@ -2,6 +2,8 @@
 using LSBEncoding.Utils;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows;
 
 namespace LSBEncoding.Views
 {
@@ -10,6 +12,11 @@ namespace LSBEncoding.Views
     /// </summary>
     public class BaseViewModel : PropertyNotifierClass
     {
+        /// <summary>
+        /// Background worker that can update progress bar
+        /// </summary>
+        protected BackgroundWorker _worker;
+
         /// <summary>
         /// Default constructor for view model that initializes basic data
         /// </summary>
@@ -20,12 +27,107 @@ namespace LSBEncoding.Views
             ChooseEncodedImageFilePathCommand = new BindableCommand(OnChooseEncodedImageFilePathClick);
             MainActionCommand = new BindableCommand(OnMainActionClick);
             SelectedBitNumber = BitComboBoxItems[BitComboBoxItems.Count - 1];
+            SetPBValues(0);
+            ProgressBarVisibility = Visibility.Collapsed;
+            SetUpBackgroundWorker();
+        }
+
+        /// <summary>
+        /// Sets up background worker with its basic properties
+        /// </summary>
+        private void SetUpBackgroundWorker()
+        {
+            _worker = new BackgroundWorker();
+            _worker.DoWork += PerformCoding;
+            _worker.WorkerReportsProgress = true;
+            _worker.ProgressChanged += WorkerReportProgress;
+            _worker.RunWorkerCompleted += WorkerCompleted;
         }
 
         /// <summary>
         /// Collection of possible bit options to be chosen
         /// </summary>
         public ObservableCollection<int> BitComboBoxItems { get; set; } = new ObservableCollection<int>() { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+        /// <summary>
+        /// Holds maximum value of progress bar
+        /// </summary>
+        private double _maxProgressBarValue;
+        /// <summary>
+        /// Accessor for maximum value of progress bar
+        /// </summary>
+        public double MaxProgressBarValue
+        {
+            get => _maxProgressBarValue;
+            set => SetProperty(ref _maxProgressBarValue, value);
+        }
+
+        /// <summary>
+        /// Holds current value of progress bar
+        /// </summary>
+        private double _currentProgressBarValue;
+        /// <summary>
+        /// Accessor for current value of progress bar
+        /// </summary>
+        public double CurrentProgressBarValue
+        {
+            get => _currentProgressBarValue;
+            set => SetProperty(ref _currentProgressBarValue, value);
+        }
+
+        /// <summary>
+        /// Method used by second thread to perform encoding/decoding
+        /// </summary>
+        /// <param name="sender"><see cref="BackgroundWorker"/> object</param>
+        /// <param name="doWorkEventArgs">Parameters of workers job</param>
+        private void PerformCoding(object sender, DoWorkEventArgs doWorkEventArgs)
+        {
+            PerformCoding();
+        }
+
+        /// <summary>
+        /// Method invoked after encoding/decoding ends or is interrupted
+        /// </summary>
+        /// <param name="sender"><see cref="BackgroundWorker"/> object</param>
+        /// <param name="runWorkerCompletedEventArgs">Invocation arguments</param>
+        private void WorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        {
+            MaxProgressBarValue = 100;
+            CurrentProgressBarValue = 100;
+            ProgressBarVisibility = Visibility.Collapsed;
+        }
+
+        /// <summary>
+        /// Method used to report progress by encoding/decoding thread - increases progressbar value
+        /// </summary>
+        /// <param name="sender"><see cref="BackgroundWorker"/> object</param>
+        /// <param name="progressChangedEventArgs">Arguments of invocation</param>
+        private void WorkerReportProgress(object sender, ProgressChangedEventArgs progressChangedEventArgs)
+        {
+            CurrentProgressBarValue += progressChangedEventArgs.ProgressPercentage;
+        }
+
+        /// <summary>
+        /// Visibility of progressbar
+        /// </summary>
+        private Visibility _progressBarVisibility;
+        /// <summary>
+        /// Accessor for progressbar visibility
+        /// </summary>
+        public Visibility ProgressBarVisibility
+        {
+            get => _progressBarVisibility;
+            set => SetProperty(ref _progressBarVisibility, value);
+        }
+
+        /// <summary>
+        /// Resets progress bar data
+        /// </summary>
+        protected void SetPBValues(int maxValue)
+        {
+            MaxProgressBarValue = maxValue;
+            CurrentProgressBarValue = 0;
+        }
 
         /// <summary>
         /// Variable holding number of bits that should be used in encodeing/decoding process
@@ -130,7 +232,15 @@ namespace LSBEncoding.Views
         /// <summary>
         /// Action started in result of clicking on main button in given view
         /// </summary>
-        protected virtual void OnMainActionClick() { }
+        protected virtual void OnMainActionClick()
+        {
+            _worker.RunWorkerAsync();
+        }
+
+        /// <summary>
+        /// Method containing work that performs encoding and decoding
+        /// </summary>
+        protected virtual void PerformCoding() { }
 
         /// <summary>
         /// Command fired in result of clicking at help button

@@ -1,10 +1,10 @@
 ﻿using LSBEncoding.Commands;
 using LSBEncoding.Utils;
-using System;
 using System.Collections;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Windows;
 
 namespace LSBEncoding.Views.DecoderView
 {
@@ -13,6 +13,11 @@ namespace LSBEncoding.Views.DecoderView
     /// </summary>
     public class DecoderViewModel : BaseViewModel
     {
+        /// <summary>
+        /// Number of steps to perform aside of decoding work
+        /// </summary>
+        private const int ADDITIONAL_WORKER_STEPS = 2;
+
         /// <inheritdoc/>
         public DecoderViewModel() : base()
         {
@@ -20,7 +25,7 @@ namespace LSBEncoding.Views.DecoderView
         }
 
         /// <inheritdoc/>
-        protected override void OnMainActionClick()
+        protected override void PerformCoding()
         {
             if (!File.Exists(EncodedImageFilePath))
             {
@@ -29,6 +34,7 @@ namespace LSBEncoding.Views.DecoderView
             }
 
             MainString = Encoding.ASCII.GetString(GetDecodedText());
+            _worker.ReportProgress(1);
 
             PrefilledMessageBox.ShowInformation("Decoding finished");
         }
@@ -37,13 +43,16 @@ namespace LSBEncoding.Views.DecoderView
         /// Decodes text from encoded image
         /// </summary>
         /// <returns>Decoded text</returns>
-        private Byte[] GetDecodedText()
+        private byte[] GetDecodedText()
         {
             using (Bitmap imageToDecode = new Bitmap(EncodedImageFilePath))
             {
                 int readBitsToDecode = SelectedBitNumber;
                 int imageWidth = imageToDecode.Width;
                 int imageHeight = imageToDecode.Height;
+                SetPBValues(imageWidth + ADDITIONAL_WORKER_STEPS);
+                ProgressBarVisibility = Visibility.Visible;
+
                 Color pixelToDecode;
                 BitArray[] encodedPixelColorRGBArrays = new BitArray[3];
                 BitArray decodedBits = new BitArray(imageWidth * imageHeight * readBitsToDecode * 3);
@@ -65,6 +74,7 @@ namespace LSBEncoding.Views.DecoderView
                             }
                         }
                     }
+                    _worker.ReportProgress(1);
                 }
                 return GetDecodedText(decodedBits);
             }
@@ -75,15 +85,16 @@ namespace LSBEncoding.Views.DecoderView
         /// </summary>
         /// <param name="decodedBits">Arrays with decoded bits</param>
         /// <returns>Decoded text</returns>
-        private Byte[] GetDecodedText(BitArray decodedBits)
+        private byte[] GetDecodedText(BitArray decodedBits)
         {
-            Byte[] lettersInBites = new Byte[decodedBits.Length / 8];
+            byte[] lettersInBites = new byte[decodedBits.Length / 8];
             BitArray letter;
             for (int i = 0; i < lettersInBites.Length; i++)
             {
                 letter = new BitArray(new bool[] { decodedBits[i * 8], decodedBits[i * 8 + 1], decodedBits[i * 8 + 2], decodedBits[i * 8 + 3], decodedBits[i * 8 + 4], decodedBits[i * 8 + 5], decodedBits[i * 8 + 6], decodedBits[i * 8 + 7] });
                 letter.CopyTo(lettersInBites, i);
             }
+            _worker.ReportProgress(1);
             return lettersInBites;
         }
 
